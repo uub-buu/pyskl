@@ -5,7 +5,7 @@ from mmcv.runner import load_checkpoint
 
 from ...utils import Graph, cache_checkpoint
 from ..builder import BACKBONES
-from .utils import mstcn, unit_gcn, unit_tcn
+from .utils import mstcn, unit_gcn, unit_tcn, dwstcn
 
 EPS = 1e-4
 
@@ -37,6 +37,8 @@ class STGCNBlock(nn.Module):
             self.tcn = unit_tcn(out_channels, out_channels, 9, stride=stride, **tcn_kwargs)
         elif tcn_type == 'mstcn':
             self.tcn = mstcn(out_channels, out_channels, stride=stride, **tcn_kwargs)
+        elif tcn_type == 'ds_tcn':
+            self.tcn = dwstcn(out_channels, out_channels, 9, stride=stride, **tcn_kwargs)
         self.relu = nn.ReLU()
 
         if not residual:

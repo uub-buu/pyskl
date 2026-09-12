@@ -4,7 +4,24 @@ from mmcv.cnn import build_norm_layer
 
 from .init_func import bn_init, conv_init
 
+class dwstcn(nn.Module):
+    def __init__(self, in_channels, out_channels, kernel_size=9, stride=1, dilation=1, dropout=0):
+        super().__init__()
+        pad = (kernel_size + (kernel_size - 1) * (dilation - 1) - 1) // 2
+        self.depthwise = nn.Conv2d(
+            in_channels, in_channels, (kernel_size, 1),
+            stride=(stride, 1), padding=(pad, 0), dilation=(dilation, 1),
+            groups=in_channels, bias=False)
+        self.bn1 = nn.BatchNorm2d(in_channels)
+        self.pointwise = nn.Conv2d(in_channels, out_channels, 1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        self.relu = nn.ReLU(inplace=True)
+        self.drop = nn.Dropout(dropout, inplace=True)
 
+    def forward(self, x):
+        x = self.relu(self.bn1(self.depthwise(x)))
+        x = self.bn2(self.pointwise(x))
+        return self.drop(x)
 class unit_tcn(nn.Module):
 
     def __init__(self, in_channels, out_channels, kernel_size=9, stride=1, dilation=1, norm='BN', dropout=0):
