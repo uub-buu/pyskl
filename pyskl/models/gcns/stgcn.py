@@ -37,7 +37,7 @@ class STGCNBlock(nn.Module):
             self.tcn = unit_tcn(out_channels, out_channels, 9, stride=stride, **tcn_kwargs)
         elif tcn_type == 'mstcn':
             self.tcn = mstcn(out_channels, out_channels, stride=stride, **tcn_kwargs)
-        elif tcn_type == 'ds_tcn':
+        elif tcn_type == 'dwstcn':
             self.tcn = dwstcn(out_channels, out_channels, 9, stride=stride, **tcn_kwargs)
         self.relu = nn.ReLU()
 
