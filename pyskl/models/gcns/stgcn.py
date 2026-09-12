@@ -27,7 +27,7 @@ class STGCNBlock(nn.Module):
         assert len(kwargs) == 0, f'Invalid arguments: {kwargs}'
 
         tcn_type = tcn_kwargs.pop('type', 'unit_tcn')
-        assert tcn_type in ['unit_tcn', 'mstcn']
+        assert tcn_type in ['unit_tcn', 'mstcn', 'dwstcn']
         gcn_type = gcn_kwargs.pop('type', 'unit_gcn')
         assert gcn_type in ['unit_gcn']
 
