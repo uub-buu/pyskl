@@ -3,7 +3,7 @@ model = dict(
     backbone=dict(
         type='STGCN',
         tcn_type='ds_tcn',
-        graph_cfg=dict(layout='nturgb+d', mode='spatial')),
+        graph_cfg=dict(layout='coco', mode='spatial')),
     cls_head=dict(type='GCNHead', num_classes=51, in_channels=256))
 
 dataset_type = 'PoseDataset'
