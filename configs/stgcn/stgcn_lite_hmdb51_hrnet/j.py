@@ -37,7 +37,7 @@ test_pipeline = [
 ]
 data = dict(
     videos_per_gpu=16,
-    workers_per_gpu=2,
+    workers_per_gpu=0,
     test_dataloader=dict(videos_per_gpu=1),
     train=dict(
         type='RepeatDataset',
@@ -59,3 +59,4 @@ log_config = dict(interval=100, hooks=[dict(type='TextLoggerHook')])
 # runtime settings
 log_level = 'INFO'
 work_dir = '/content/drive/MyDrive/wes237b_project/work_dirs/lite_stgcn_hmdb51'
+dist_params = dict(backend='gloo')
