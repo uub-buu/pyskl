@@ -72,9 +72,15 @@ class unit_gcn(nn.Module):
         if self.conv_pos == 'pre':
             x = self.conv(x)
             x = x.view(n, self.num_subsets, -1, t, v)
-            x = torch.einsum('nkctv,kvw->nctw', (x, A)).contiguous()
+            out = torch.zeros(n, x.shape[2], t, A.shape[-1], device=x.device, dtype=x.dtype)
+            for k in range(self.num_subsets):
+                out = out + torch.matmul(x[:, k], A[k])
+            x = out.contiguous()
         elif self.conv_pos == 'post':
-            x = torch.einsum('nctv,kvw->nkctw', (x, A)).contiguous()
+            outs = []
+            for k in range(A.shape[0]):
+                outs.append(torch.matmul(x, A[k]))
+            x = torch.stack(outs, dim=1).contiguous()
             x = x.view(n, -1, t, v)
             x = self.conv(x)
 
